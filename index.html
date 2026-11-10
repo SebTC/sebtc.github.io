@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sebastian Torres · AI automation for ops and support teams</title>
+<meta name="description" content="I build AI tools that take the routine work off operations and support teams, with a human check on everything that reaches a client.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --midnight:#0b1a33;
+    --navy:#12284d;
+    --navy-2:#183463;
+    --white:#ffffff;
+    --soft:#c9d6ee;
+    --muted:#9fb0cf;
+    --line:rgba(255,255,255,.14);
+    /* Flow step colors */
+    --input:#5ab0ff;
+    --auto:#2dd4bf;
+    --ai:#a78bfa;
+    --human:#fbbf24;
+    --result:#34d399;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--midnight);scroll-behavior:smooth}
+  body{background:var(--midnight);color:var(--white);font-family:Inter,system-ui,-apple-system,sans-serif;
+       line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:var(--white)}
+  .wrap{width:min(860px,100%);margin:0 auto;padding:0 20px}
+
+  /* Hero */
+  .hero{position:relative;height:clamp(200px,34vh,340px);overflow:hidden;background:#e6ebf5}
+  .hero img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block}
+  .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(11,26,51,0) 75%,var(--midnight) 100%)}
+  header.intro{padding:28px 0 8px;display:grid;gap:16px}
+  .name{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);font-weight:600}
+  h1{font-size:clamp(28px,5.4vw,44px);line-height:1.1;font-weight:700;letter-spacing:-.01em;max-width:20ch}
+  .lede{font-size:clamp(16px,2.2vw,18px);color:var(--soft);max-width:62ch}
+
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);
+         border-radius:12px;overflow:hidden}
+  .stats div{background:var(--navy);padding:16px 18px;display:grid;gap:4px;align-content:start}
+  .stats b{font-size:clamp(24px,4.4vw,36px);line-height:1;font-weight:700;font-variant-numeric:tabular-nums}
+  .stats span{font-size:14px;line-height:1.35;color:var(--soft)}
+
+  .ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+  .btn{display:inline-flex;align-items:center;padding:11px 20px;border-radius:999px;font-weight:600;font-size:15px;
+       text-decoration:none;transition:transform .15s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn:focus-visible,a:focus-visible{outline:2px solid var(--white);outline-offset:3px}
+  .primary{background:var(--white);color:var(--midnight)}
+  .secondary{border:1px solid var(--line);color:var(--white);background:var(--navy)}
+
+  /* Sections */
+  section{padding:44px 0 8px}
+  h2{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);font-weight:600;
+     padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:16px}
+
+  /* Legend for the flow colors */
+  .legend{list-style:none;display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--soft);margin-bottom:18px}
+  .legend li{display:flex;align-items:center;gap:7px}
+  .legend i{width:10px;height:10px;border-radius:3px;background:var(--c)}
+
+  .cases{display:grid;gap:16px}
+  .case{background:var(--navy);border:1px solid var(--line);border-radius:14px;padding:22px;display:grid;gap:16px}
+  .case-head{display:grid;gap:4px}
+  .case-head .row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 16px;align-items:baseline}
+  .case h3{font-size:20px;line-height:1.25;font-weight:700}
+  .tag{font-size:13px;color:var(--muted)}
+  .summary{color:var(--soft);font-size:16px;max-width:64ch}
+
+  /* Result numbers */
+  .nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);
+        border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .nums div{background:var(--navy-2);padding:12px 14px;display:grid;gap:2px}
+  .nums b{font-size:26px;line-height:1.05;font-weight:700;font-variant-numeric:tabular-nums}
+  .nums span{font-size:13px;line-height:1.35;color:var(--soft)}
+
+  /* Flow diagram */
+  .flow{list-style:none;display:flex;align-items:stretch;gap:0}
+  .flow li{flex:1 1 0;display:flex;align-items:center;min-width:0}
+  .step{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;
+        padding:10px 8px;border-radius:10px;border:1px solid color-mix(in srgb,var(--c) 55%,transparent);
+        background:color-mix(in srgb,var(--c) 14%,var(--navy));font-size:13px;font-weight:600;line-height:1.25;min-height:76px}
+  .step svg{width:22px;height:22px;color:var(--c);flex:none}
+  .flow li + li::before{content:"";flex:none;width:18px;height:2px;margin:0 2px;
+        background:linear-gradient(to right,rgba(255,255,255,.15),rgba(255,255,255,.5))}
+  .input{--c:var(--input)} .auto{--c:var(--auto)} .ai{--c:var(--ai)} .human{--c:var(--human)} .result{--c:var(--result)}
+  .step.human{background:var(--human);border-color:var(--human);color:var(--midnight)}
+  .step.human svg{color:var(--midnight)}
+
+  .stack{display:flex;flex-wrap:wrap;gap:6px}
+  .stack span{font-size:12px;color:var(--soft);border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+
+  .code{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .code a.case{text-decoration:none;transition:border-color .15s,transform .15s;align-content:start}
+  .code a.case:hover{border-color:rgba(255,255,255,.35);transform:translateY(-1px)}
+  .more{font-size:14px;font-weight:600;color:var(--white)}
+
+  .note{font-size:14px;color:var(--muted);margin-top:16px;max-width:70ch}
+  footer{margin-top:48px;border-top:1px solid var(--line);padding:22px 0 40px;font-size:14px;color:var(--soft);
+         display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between}
+  footer a{color:var(--soft)}
+
+  @media (max-width:640px){
+    .stats{grid-template-columns:1fr}
+    .stats div{grid-template-columns:auto 1fr;align-items:center;gap:14px}
+    .code{grid-template-columns:1fr}
+    .case{padding:18px}
+    section{padding-top:36px}
+    /* Flow turns vertical on phones */
+    .flow{flex-direction:column}
+    .flow li{flex-direction:column;align-items:stretch;width:100%}
+    .flow li + li::before{width:2px;height:14px;margin:2px auto;
+        background:linear-gradient(to bottom,rgba(255,255,255,.15),rgba(255,255,255,.5))}
+    .step{flex-direction:row;justify-content:flex-start;text-align:left;min-height:0;padding:10px 12px;gap:10px}
+  }
+</style>
+</head>
+<body>
+  <!-- Icon set -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-msg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+      <symbol id="i-inbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></symbol>
+      <symbol id="i-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></symbol>
+      <symbol id="i-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></symbol>
+      <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></symbol>
+      <symbol id="i-person" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21v-1a6 6 0 0 1 9.5-4.9"/><path d="m15 18 2 2 4-4"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></symbol>
+      <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="hero"><img src="sebas_top.jpg" alt="Sebastian Torres"></div>
+
+  <div class="wrap">
+    <header class="intro">
+      <p class="name">Sebastian Torres</p>
+      <h1>I build AI tools that take the busywork off ops and support teams.</h1>
+      <p class="lede">I work in client operations and studied mechatronics engineering. I use Claude to automate the repetitive parts of the job, and I keep a human check on everything that reaches a client.</p>
+      <div class="stats">
+        <div><b>92%</b><span>less time logging each client request</span></div>
+        <div><b>75%</b><span>less case-logging time for a whole support team</span></div>
+        <div><b>$1,440</b><span>a month in cloud costs removed</span></div>
+      </div>
+      <div class="ctas">
+        <a class="btn primary" href="mailto:s.torrescarrasco@gmail.com">Email me</a>
+        <a class="btn secondary" href="https://linkedin.com/in/sebastiantc/">LinkedIn</a>
+        <a class="btn secondary" href="https://github.com/SebTC">GitHub</a>
+      </div>
+    </header>
+
+    <section aria-labelledby="work">
+      <h2 id="work">Case studies</h2>
+      <ul class="legend" aria-label="Flow colors">
+        <li><i style="--c:var(--input)"></i>Input</li>
+        <li><i style="--c:var(--auto)"></i>Automation</li>
+        <li><i style="--c:var(--ai)"></i>AI (Claude or a vision model)</li>
+        <li><i style="--c:var(--human)"></i>Human check</li>
+        <li><i style="--c:var(--result)"></i>Result</li>
+      </ul>
+      <div class="cases">
+
+        <article class="case">
+          <div class="case-head">
+            <div class="row"><h3>Request tracker autopilot</h3><span class="tag">Chrome extension · Nov 2026</span></div>
+            <p class="summary">Logs every client reply automatically and drafts the next one, for a 6-studio boutique fitness brand.</p>
+          </div>
+          <div class="nums">
+            <div><b>10 sec</b><span>to log each case, down from 2 min</span></div>
+            <div><b>92%</b><span>less logging time</span></div>
+          </div>
+          <ol class="flow" aria-label="How it works">
+            <li><div class="step input"><svg><use href="#i-msg"/></svg>Reply sent</div></li>
+            <li><div class="step auto"><svg><use href="#i-bolt"/></svg>Extension captures it</div></li>
+            <li><div class="step ai"><svg><use href="#i-spark"/></svg>Claude fills the tracker</div></li>
+            <li><div class="step human"><svg><use href="#i-person"/></svg>I review</div></li>
+            <li><div class="step result"><svg><use href="#i-check"/></svg>Case logged</div></li>
+          </ol>
+          <div class="stack"><span>JavaScript</span><span>Python</span><span>Claude Code</span></div>
+        </article>
+
+        <article class="case">
+          <div class="case-head">
+            <div class="row"><h3>AI request classifier</h3><span class="tag">Web tool · May 2026</span></div>
+            <p class="summary">Paste a client conversation and Claude fills in all 17 fields of the support team's tracker.</p>
+          </div>
+          <div class="nums">
+            <div><b>75%</b><span>less case-logging time, whole team</span></div>
+            <div><b>Under $3</b><span>a month to run</span></div>
+          </div>
+          <ol class="flow" aria-label="How it works">
+            <li><div class="step input"><svg><use href="#i-msg"/></svg>Paste conversation</div></li>
+            <li><div class="step ai"><svg><use href="#i-spark"/></svg>Claude classifies it</div></li>
+            <li><div class="step human"><svg><use href="#i-person"/></svg>Team member checks</div></li>
+            <li><div class="step result"><svg><use href="#i-doc"/></svg>Form submitted</div></li>
+          </ol>
+          <div class="stack"><span>JavaScript</span><span>Claude API</span></div>
+        </article>
+
+
+        <article class="case">
+          <div class="case-head">
+            <div class="row"><h3>Harvi-Vision</h3><span class="tag">Harvverse internship · Jul to Oct 2026</span></div>
+            <p class="summary">Coffee-leaf disease detection from farmers' photos. I owned it from data quality to cloud deployment.</p>
+          </div>
+          <div class="nums">
+            <div><b>$1,440</b><span>a month in hosting cost removed</span></div>
+            <div><b>4.4x</b><span>cost undercount caught in an AI service</span></div>
+            <div><b>2,900+</b><span>photos reviewed for quality</span></div>
+          </div>
+          <ol class="flow" aria-label="How it works">
+            <li><div class="step input"><svg><use href="#i-camera"/></svg>Farmer's photo</div></li>
+            <li><div class="step ai"><svg><use href="#i-spark"/></svg>Vision model</div></li>
+            <li><div class="step auto"><svg><use href="#i-bolt"/></svg>Pay-per-use cloud</div></li>
+            <li><div class="step result"><svg><use href="#i-doc"/></svg>Diagnosis report</div></li>
+          </ol>
+          <div class="stack"><span>Python</span><span>YOLOv8</span><span>Google Cloud Run</span><span>Gemini</span></div>
+        </article>
+
+      </div>
+    </section>
+
+    <section aria-labelledby="code">
+      <h2 id="code">Code you can read</h2>
+      <div class="code">
+        <a class="case" href="https://github.com/SebTC/FDM-Failure-Detection">
+          <div class="case-head">
+            <h3>3D-print failure detection</h3>
+            <p class="summary">My thesis: a Raspberry Pi camera spots failed prints and pauses the printer.</p>
+          </div>
+          <div class="nums">
+            <div><b>90.8%</b><span>mAP50, 3 failure types</span></div>
+            <div><b>2.4 ms</b><span>per frame, on $78 of hardware</span></div>
+          </div>
+          <div class="stack"><span>Python</span><span>YOLOv8</span><span>TensorFlow Lite</span><span>Raspberry Pi</span></div>
+          <span class="more">View on GitHub</span>
+        </a>
+        <a class="case" href="https://github.com/SebTC/ucl-fantasy">
+          <div class="case-head">
+            <h3>Champions League Fantasy analytics</h3>
+            <p class="summary">Projects player points from expected goals and fixtures, then suggests transfers.</p>
+          </div>
+          <div class="nums">
+            <div><b>2.18 to 2.07</b><span>average error after backtesting</span></div>
+            <div><b>25</b><span>automated tests</span></div>
+          </div>
+          <div class="stack"><span>Python</span><span>Streamlit</span><span>SQLite</span><span>pytest</span></div>
+          <span class="more">View on GitHub</span>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <span>English (C2) / Español (native) · Tegucigalpa, Honduras (Central Time)</span>
+      <span><a href="mailto:s.torrescarrasco@gmail.com">s.torrescarrasco@gmail.com</a></span>
+    </footer>
+  </div>
+</body>
+</html>
